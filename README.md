@@ -46,3 +46,7 @@ This is an app where statistics teachers can generate data and distributions for
 ---
 #### New Dataset
 ![image](planning/wireframes/new.png)
+
+## Entity Relationships
+
+![image](planning/erd.png)
