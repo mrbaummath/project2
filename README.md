@@ -27,22 +27,22 @@ This is an app where statistics teachers can generate data and distributions for
 ## Wireframes
 
 #### Home 
-!(/planning/wireframes/home.png)
+![image](/planning/wireframes/home.png)
 ---
 #### Sign-up
-!(planning/wireframes/signup.png)
+![image](planning/wireframes/signup.png)
 ---
 #### Login
-!(planning/wireframes/login.png)
+![image](planning/wireframes/login.png)
 ---
 #### Index
-!(planning/wireframes/index.png)
+![image](planning/wireframes/index.png)
 ---
 #### View Distribution and Notes
-!(planning/wireframes/view_dist.png)
+![image](planning/wireframes/view_dist.png)
 ---
 #### View Dataset
-!(planning/wireframes/view_data.png)
+![image](planning/wireframes/view_data.png)
 ---
 #### New Dataset
-!(planning/wireframes/new.png)
+![image](planning/wireframes/new.png)
