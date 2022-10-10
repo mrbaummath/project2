@@ -13,7 +13,10 @@ This is an app where statistics teachers can generate data and distributions for
     - mongoose
 - MongoDB
 - Desmos API
+    -calculator: https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6 (this demo key is kosher for dev purposes )
 - Random.org API
+    - generateGaussians method
+    - generateDecimalFractions method
 ---
 
 ## User Stories
@@ -50,3 +53,12 @@ This is an app where statistics teachers can generate data and distributions for
 ## Entity Relationships
 
 ![image](planning/erd.png)
+
+## Schedule
+Monday-Tuesday: build backend for routes
+---
+Wednesday: test my API and build and test calls to third-party APIs
+---
+Thursday-Friday: build views
+---
+Saturday-Sunday: test and refine 
