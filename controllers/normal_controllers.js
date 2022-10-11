@@ -34,9 +34,10 @@ router.post('/', (req, res) => {
 	//*add to req.body 
 	req.body.owner = req.session.userId
 	Normal.create(req.body)
-		.then(example => {
-			console.log('this was returned from create', example)
-			res.redirect('/sets')
+		.then(normalSet => {
+			console.log('this was returned from create', normalSet)
+			res.send(normalSet)
+			// res.redirect('/sets')
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)

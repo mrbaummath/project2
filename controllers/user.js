@@ -21,6 +21,7 @@ router.get('/signup', (req, res) => {
 // POST to send the signup info
 router.post('/signup', async (req, res) => {
 	// set the password to hashed password
+	console.log(req.body)
   req.body.password = await bcrypt.hash(
 		req.body.password,
 		await bcrypt.genSalt(10)
@@ -29,7 +30,8 @@ router.post('/signup', async (req, res) => {
 	User.create(req.body)
 		// if created successfully redirect to login
 		.then((user) => {
-			res.redirect('/auth/login')
+			res.send(user)
+			// res.redirect('/auth/login')
 		})
 		// if an error occurs, send err
 		.catch((error) => {
