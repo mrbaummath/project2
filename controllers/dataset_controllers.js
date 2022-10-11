@@ -23,22 +23,31 @@ router.get('/', (req, res) => {
         normalSets: (cb) => {Normal.find({}).exec(cb)},
         binomSets: (cb) => {Binom.find({}).exec(cb)}
     })
-    .then((result) => res.send(result))
-    .catch(error => {console.log(error)})
+    .then((results) => {
+        const { normalSets, binomSets } = results
+        res.render('datasets/index', {normalSets, binomSets})
+    })
+    .catch(error => {
+        res.redirect(`/error?error=${error}`)
+    })
 })
 
 // index that shows only the user's datasets
 //will use async.parallel to get documents from both binom and normal collections 
+
 router.get('/mine', (req, res) => {
-    // destructure user info from req.session
     const { username, userId, loggedIn } = req.session
-	Example.find({ owner: userId })
-		.then(examples => {
-			res.render('examples/index', { examples, username, loggedIn })
-		})
-		.catch(error => {
-			res.redirect(`/error?error=${error}`)
-		})
+    async.parallel ({
+        normalSets: (cb) => {Normal.find({ owner: userId }).exec(cb)},
+        binomSets: (cb) => {Binom.find({ owner: uderId }).exec(cb)}
+    })
+    .then((results) => {
+        const { normalSets, binomSets } = results
+        res.render('datasets/index', {normalSets, binomSets})
+    })
+    .catch(error => {
+        res.redirect(`/error?error=${error}`)
+    })
 })
 
 //export router
