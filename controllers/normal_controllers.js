@@ -3,8 +3,8 @@
 // Import Dependencies
 const express = require('express')
 const Normal = require('../models/normal')
-//*add axios
-//*add mathjs
+import { std } from 'mathjs'
+const axios = require('axios').default
 
 // Create router
 const router = express.Router()
@@ -24,7 +24,6 @@ router.use((req, res, next) => {
 })
 
 // Routes
-
 
 // create -> POST route that actually calls the db and makes a new document
 router.post('/', (req, res) => {
@@ -90,8 +89,8 @@ router.get('/:normalId', (req, res) => {
 router.delete('/:normalId', (req, res) => {
 	const normalId = req.params.id
 	Normal.findByIdAndRemove(normalId)
-		.then(example => {
-			res.redirect('/examples')
+		.then(normalSet => {
+			res.redirect('/sets')
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)

@@ -13,8 +13,6 @@ const binomSchema = new Schema(
 		title: { type: String, required: true },
 		p: { type: String, required: true },
         q: { type: String, required: true },
-		min: { type: Number, required: true },
-		max: { type: Number, required: true},
 		n: {type: Number, required: true},
         percentP: {type: Number, required: true},
 		values: {type: [Boolean], required: true},
