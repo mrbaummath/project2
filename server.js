@@ -6,7 +6,7 @@ const express = require("express")
 const middleware = require('./utils/middleware')
 const NormalRouter = require('./controllers/normal_controllers')
 const BinomRouter = require('./controllers/binom_controllers')
-const DataRouter = require('./controllers/data_controllers')
+const DataRouter = require('./controllers/dataset_controllers')
 const UserRouter = require('./controllers/user')
 const User = require("./models/user")
 // SEE MORE DEPENDENCIES IN ./utils/middleware.js
@@ -25,7 +25,7 @@ middleware(app)
 
 app.use('/auth', UserRouter)
 app.use('/normalsets', NormalRouter)
-app.use('/binomsets', BinomRouter)
+// app.use('/binomsets', BinomRouter)
 app.use('/datasets', DataRouter)
 
 app.get('/', (req, res) => {

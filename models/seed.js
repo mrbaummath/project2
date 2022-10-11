@@ -16,7 +16,6 @@ db.on('open', ()=> {
             Normal.create(startNormalSets)
                 .then(newSets => {
                     console.log(newSets)
-                    db.close()
                 })
                 .catch(error => {
                     console.log(error)
@@ -27,28 +26,28 @@ db.on('open', ()=> {
             console.log(error)
             db.close()
         })
-})
-
-db.on('open', ()=> {
-    const BinomNormalSets = [
+    const startBinomSets = [
         {title: 'coins', p: 'heads', q: 'tails', n: 4, percentP: .25, values:[true,false,false,false]},
         {title: 'votes', p: 'yay', q: 'nay', n: 4, percentP: .5, values: [true, true, false, false] }
     ]
+
     Binom.deleteMany({})
-        .then(deletedSets => {
-            console.log(deletedSets)
-            Binom.create(startBinomSets)
-                .then(newSets => {
-                    console.log(newSets)
-                    db.close()
-                })
-                .catch(error => {
-                    console.log(error)
-                    db.close()
-                })
-        })
-        .catch(error => {
-            console.log(error)
-            db.close()
-        })
+    .then(deletedSets => {
+        console.log(deletedSets)
+        Binom.create(startBinomSets)
+            .then(newSets => {
+                console.log(newSets)
+                db.close()
+            })
+            .catch(error => {
+                console.log(error)
+                db.close()
+            })
+    })
+    .catch(error => {
+        console.log(error)
+        db.close()
+    })
+
 })
+

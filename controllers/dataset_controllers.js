@@ -12,7 +12,6 @@ const router = express.Router()
 //GET request to get form to create a new dataset, whether normal or binom
 router.get('/new', (req,res) => {
     const { username, loggedIn, userId } = req.session
-    Normal.find()
     res.render('datasets/new', { username, loggedIn })
 
 })
@@ -20,20 +19,12 @@ router.get('/new', (req,res) => {
 // index ALL datasets
 //will use async.parallel to get documents from both binom and normal collections 
 router.get('/', (req, res) => {
-    async.parallel({
-        one(() => {
-            Normal.find({})
-        }),
-        two(() => {
-            Binom.find({})
-        })
+    async.parallel ({
+        normalSets: (cb) => {Normal.find({}).exec(cb)},
+        binomSets: (cb) => {Binom.find({}).exec(cb)}
     })
-    .then(results () => {
-        console.log(results)
-    })
-    .catch(error => {
-        console.log(error)
-    })
+    .then((result) => res.send(result))
+    .catch(error => {console.log(error)})
 })
 
 // index that shows only the user's datasets

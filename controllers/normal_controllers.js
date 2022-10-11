@@ -3,7 +3,7 @@
 // Import Dependencies
 const express = require('express')
 const Normal = require('../models/normal')
-import { std } from 'mathjs'
+const { stdev } = require('mathjs')
 const axios = require('axios').default
 
 // Create router
