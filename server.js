@@ -25,7 +25,7 @@ middleware(app)
 
 app.use('/auth', UserRouter)
 app.use('/normalsets', NormalRouter)
-// app.use('/binomsets', BinomRouter)
+app.use('/binomsets', BinomRouter)
 app.use('/datasets', DataRouter)
 
 app.get('/', (req, res) => {

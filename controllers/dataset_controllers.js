@@ -39,11 +39,12 @@ router.get('/mine', (req, res) => {
     const { username, userId, loggedIn } = req.session
     async.parallel ({
         normalSets: (cb) => {Normal.find({ owner: userId }).exec(cb)},
-        binomSets: (cb) => {Binom.find({ owner: uderId }).exec(cb)}
+        binomSets: (cb) => {Binom.find({ owner: userId }).exec(cb)}
     })
     .then((results) => {
         const { normalSets, binomSets } = results
-        res.render('datasets/index', {normalSets, binomSets})
+        res.send(results)
+        // res.render('datasets/index', {normalSets, binomSets})
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)
