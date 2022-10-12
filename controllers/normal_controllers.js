@@ -66,7 +66,8 @@ router.put('/:normalId', (req, res) => {
 	
 	Normal.findByIdAndUpdate(normalId, req.body, { new: true })
 		.then(normalSet => {
-			res.redirect(`/normalsets/${example.id}`)
+			res.send(normalSet)
+			// res.redirect(`/normalsets/${example.id}`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -79,21 +80,10 @@ router.get('/:normalId', (req, res) => {
 	Normal.findById(normalId)
 		.then(normalSet => {
             const {username, loggedIn, userId} = req.session
-			res.render('normalsets/show', { normalSet, username, loggedIn, userId })
+			res.send(normalSet)
+			// res.render('normalsets/show', { normalSet, username, loggedIn, userId })
 		})
 		.catch((error) => {
-			res.redirect(`/error?error=${error}`)
-		})
-})
-
-// delete route
-router.delete('/:normalId', (req, res) => {
-	const normalId = req.params.id
-	Normal.findByIdAndRemove(normalId)
-		.then(normalSet => {
-			res.redirect('/sets')
-		})
-		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
 })

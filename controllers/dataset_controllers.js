@@ -25,7 +25,8 @@ router.get('/', (req, res) => {
     })
     .then((results) => {
         const { normalSets, binomSets } = results
-        res.render('datasets/index', {normalSets, binomSets})
+        res.send(results)
+        // res.render('datasets/index', {normalSets, binomSets})
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)
@@ -45,6 +46,20 @@ router.get('/mine', (req, res) => {
         const { normalSets, binomSets } = results
         res.send(results)
         // res.render('datasets/index', {normalSets, binomSets})
+    })
+    .catch(error => {
+        res.redirect(`/error?error=${error}`)
+    })
+})
+
+//delete either
+router.delete('/:type/:id', (req,res) => {
+    const docId = req.params.id
+    const type = req.params.type
+    const Collection = type === 'normal' ? Normal : Binom
+    Collection.findByIdAndRemove(docId)
+    .then((query) => {
+        res.send(query)
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)
