@@ -4,7 +4,8 @@
 const express = require('express')
 const Normal = require('../models/normal')
 const { stdev } = require('mathjs')
-const axios = require('axios').default
+const { gaussPromise, processGauss } = require('../utils/random')
+
 
 // Create router
 const router = express.Router()
@@ -27,21 +28,34 @@ router.use((req, res, next) => {
 
 // create -> POST route that actually calls the db and makes a new document
 router.post('/', (req, res) => {
-	//*grab data from req.body needed to call to Random.org
-	//*call to random.org API using axios
-	//*process data 
-	//*compute mean, sd 
-	//*add to req.body 
 	req.body.owner = req.session.userId
-	Normal.create(req.body)
-		.then(normalSet => {
-			console.log('this was returned from create', normalSet)
-			res.send(normalSet)
-			// res.redirect('/sets')
+	//*grab data from req.body needed to call to Random.org
+	const { mean, stDev, n} = req.body
+	//*call to random.org API using axios
+	gaussPromise(mean, stDev, n)
+	//*process data 
+		.then ((response) => {
+			const dataArray = processGauss(response.data.result.random.data)
+			req.body.values = dataArray
+			req.body.min = dataArray[0]
+			req.body.max = dataArray[n-1]
+			console.log(req.body)
+			//create the model
+			Normal.create(req.body)
+				.then(normalSet => {
+					console.log('this was returned from create', normalSet)
+					res.send(normalSet)
+					// res.redirect('/sets')
+				})
+				.catch(error => {
+					res.redirect(`/error?error=${error}`)
+				})
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
+
+	
 })
 
 // edit route -> GET that takes us to the edit form view
