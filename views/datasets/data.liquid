@@ -1,0 +1,19 @@
+{% block content %}
+<div class="container-fluid">
+    <a class="btn btn-primary" data-toggle="collapse" href="#data-table" role="button" aria-expanded="false" aria-controls="data-table">
+        View Data
+    </a>
+    <div class="collapse" id="data-table">
+        <table class="table table-sm">
+            <tr>
+                <th scope="col">Value</th>
+            </tr>
+            {% for value in values %}
+                <tr>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

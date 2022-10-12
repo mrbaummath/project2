@@ -25,8 +25,11 @@ router.get('/', (req, res) => {
     })
     .then((results) => {
         const { normalSets, binomSets } = results
-        res.send(results)
-        // res.render('datasets/index', {normalSets, binomSets})
+        const allSets = []
+        normalSets.forEach(set => allSets.push(set))
+        binomSets.forEach(set => allSets.push(set))
+        
+        res.render('datasets/index', {allSets})
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)

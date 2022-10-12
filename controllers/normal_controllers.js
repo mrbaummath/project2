@@ -92,8 +92,7 @@ router.get('/:normalId', (req, res) => {
 	Normal.findById(normalId)
 		.then(normalSet => {
             const {username, loggedIn, userId} = req.session
-			res.send(normalSet)
-			// res.render('normalsets/show', { normalSet, username, loggedIn, userId })
+			res.render('normalsets/show', { normalSet, username, loggedIn, userId })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
