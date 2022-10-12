@@ -19,20 +19,51 @@ require('dotenv').config()
     return axios.post('https://api.random.org/json-rpc/4/invoke', requestBody)
 }
 
-//async function to use for testing purposes 
-// async function callAxios() {
-//     const response = await gaussPromise(10,6,9)
-//     console.log(response.data.result.random.data)
-// }
-
-// callAxios()
-
 const processGauss = (dataArray) => {
     let processedData = dataArray.sort(function(a,b){return a - b})
     return processedData 
 }
 
-module.exports = { gaussPromise, processGauss }
+const binomPromise = (n) => {
+    const requestBody = {
+        "jsonrpc": "2.0",
+        "method": "generateDecimalFractions",
+        "params": {
+            "apiKey": process.env.RANDOM_API_KEY,
+            "n": n,
+            "decimalPlaces": 8,
+            "replacement": true
+        },
+        "id": 42
+    }
+
+    return axios.post('https://api.random.org/json-rpc/4/invoke', requestBody)
+
+}
+
+const processBinom = (percentP, decimalArray) => {
+    const boolArray = decimalArray.map(decimal => (decimal <= percentP))
+    return boolArray
+}
+
+//async function to use for testing purposes 
+// async function getGauss() {
+//     const response = await gaussPromise(10,6,9)
+//     console.log(response.data.result.random.data)
+// }
+
+// getGauss()
+
+//async function to use for testing purposes
+// async function getDecimals() {
+//     const response = await binomPromise(10)
+//     console.log(response.data.result.random.data)
+// }
+
+// getDecimals()
+
+
+module.exports = { gaussPromise, processGauss, binomPromise, processBinom }
 
 
 

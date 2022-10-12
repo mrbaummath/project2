@@ -3,7 +3,9 @@
 // Import Dependencies
 const express = require('express')
 const Binom = require('../models/binom')
-const axios = require('axios').default
+//include functions built to call to Random.org via axios and process the data as needed
+const { binomPromise, processBinom } = require('../utils/random')
+
 
 // Create router
 const router = express.Router()
@@ -26,17 +28,27 @@ router.use((req, res, next) => {
 
 // create -> POST route that actually calls the db and makes a new document
 router.post('/', (req, res) => {
-	//*grab data from req.body needed to call to Random.org
-	//*call to random.org API using axios
-	//*process data 
-	//*compute mean, sd 
-	//*add to req.body 
+	//add user to req.body
 	req.body.owner = req.session.userId
-	Binom.create(req.body)
-		.then(binomSet => {
-			console.log('this was returned from create', binomSet)
-			res.send(binomSet)
-			// res.redirect('/sets')
+	//grab data from req.body needed to call to Random.org
+	const n = req.body.n
+	const percentP = req.body.percentP
+	//call to random.org API using axios (see ../utils/random)
+	binomPromise(n)
+	//process data 
+		.then(response => {
+			const decimalArray = response.data.result.random.data
+			req.body.values = processBinom(percentP, decimalArray)
+			Binom.create(req.body)
+				.then(binomSet => {
+					console.log('this was returned from create', binomSet)
+					res.send(binomSet)
+					// res.redirect('/sets')
+				})
+				.catch(error => {
+					res.redirect(`/error?error=${error}`)
+				})
+
 		})
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)

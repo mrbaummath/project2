@@ -3,7 +3,6 @@
 // Import Dependencies
 const express = require('express')
 const Normal = require('../models/normal')
-const { stdev } = require('mathjs')
 const { gaussPromise, processGauss } = require('../utils/random')
 
 
