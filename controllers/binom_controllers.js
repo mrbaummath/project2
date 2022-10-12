@@ -90,8 +90,7 @@ router.get('/:binomId', (req, res) => {
 	Binom.findById(binomId)
 		.then(binomSet => {
             const {username, loggedIn, userId} = req.session
-			res.send(binomSet)
-			// res.render('normalsets/show', { normalSet, username, loggedIn, userId })
+			res.render('binomsets/show', { binomSet, username, loggedIn, userId })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)

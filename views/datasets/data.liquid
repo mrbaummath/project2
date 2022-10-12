@@ -8,9 +8,19 @@
             <tr>
                 <th scope="col">Value</th>
             </tr>
-            {% for value in values %}
+            {% for value in set.values %}
                 <tr>
-                    <td>{{ value }}</td>
+                    <td>
+                        {% if set.p %}
+                            {% if value == true %}
+                                {{ set.p }}
+                            {% else %}
+                                {{ set.q }}
+                            {% endif %}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </table>
