@@ -49,8 +49,9 @@ router.get('/:normalId/edit', (req, res) => {
 	// we need to get the id
 	const normalId = req.params.id
 	Normal.findById(normalId)
-		.then(normalDist => {
-			res.render('normalsets/edit', { nomralDist })
+		.then(normalSet => {
+			res.send(normalSet)
+			// res.render('normalsets/edit', { normalSet })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -59,11 +60,11 @@ router.get('/:normalId/edit', (req, res) => {
 
 // update route
 router.put('/:normalId', (req, res) => {
-	const normalId = req.params.id
+	const normalId = req.params.normalId
 	//*grab raw data
 	//*compute new mean,sd, min, max
 	//*add to req.body
-	
+	console.log(req.body)
 	Normal.findByIdAndUpdate(normalId, req.body, { new: true })
 		.then(normalSet => {
 			res.send(normalSet)
@@ -76,7 +77,7 @@ router.put('/:normalId', (req, res) => {
 
 // show route
 router.get('/:normalId', (req, res) => {
-	const normalId = req.params.id
+	const normalId = req.params.normalId
 	Normal.findById(normalId)
 		.then(normalSet => {
             const {username, loggedIn, userId} = req.session
