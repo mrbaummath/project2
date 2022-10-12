@@ -53,14 +53,12 @@ router.post('/', (req, res) => {
 		.catch(error => {
 			res.redirect(`/error?error=${error}`)
 		})
-
-	
 })
 
 // edit route -> GET that takes us to the edit form view
 router.get('/:normalId/edit', (req, res) => {
 	// we need to get the id
-	const normalId = req.params.id
+	const normalId = req.params.normalId
 	Normal.findById(normalId)
 		.then(normalSet => {
 			res.send(normalSet)

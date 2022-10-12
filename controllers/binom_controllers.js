@@ -39,6 +39,7 @@ router.post('/', (req, res) => {
 		.then(response => {
 			const decimalArray = response.data.result.random.data
 			req.body.values = processBinom(percentP, decimalArray)
+			//create document
 			Binom.create(req.body)
 				.then(binomSet => {
 					console.log('this was returned from create', binomSet)
@@ -55,6 +56,47 @@ router.post('/', (req, res) => {
 		})
 })
 
+//show edit page 
+router.get('/:binomId/edit', (req, res) => {
+	// we need to get the id
+	const binomId = req.params.binomId
+	Binom.findById(binomId)
+		.then(binomSet => {
+			res.send(binomSet)
+			// res.render('normalsets/edit', { normalSet })
+		})
+		.catch((error) => {
+			res.redirect(`/error?error=${error}`)
+		})
+})
+
+//update route
+router.put('/:binomId', (req, res) => {
+	const binomId = req.params.binomId
+	Binom.findByIdAndUpdate(binomId, req.body, { new: true })
+		.then(binomSet => {
+			res.send(binomSet)
+			// res.redirect(`/normalsets/${example.id}`)
+		})
+		.catch((error) => {
+			res.redirect(`/error?error=${error}`)
+		})
+})
+
+
+//show
+router.get('/:binomId', (req, res) => {
+	const binomId = req.params.binomId
+	Binom.findById(binomId)
+		.then(binomSet => {
+            const {username, loggedIn, userId} = req.session
+			res.send(binomSet)
+			// res.render('normalsets/show', { normalSet, username, loggedIn, userId })
+		})
+		.catch((error) => {
+			res.redirect(`/error?error=${error}`)
+		})
+})
 
 
 module.exports = router
