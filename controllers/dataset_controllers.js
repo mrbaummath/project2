@@ -19,6 +19,7 @@ router.get('/new', (req,res) => {
 // index ALL datasets
 //will use async.parallel to get documents from both binom and normal collections 
 router.get('/', (req, res) => {
+    const { username, userId, loggedIn } = req.session
     async.parallel ({
         normalSets: (cb) => {Normal.find({}).exec(cb)},
         binomSets: (cb) => {Binom.find({}).exec(cb)}
@@ -29,7 +30,7 @@ router.get('/', (req, res) => {
         normalSets.forEach(set => allSets.push(set))
         binomSets.forEach(set => allSets.push(set))
         
-        res.render('datasets/index', {allSets})
+        res.render('datasets/index', { allSets, loggedIn, username, userId })
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)
@@ -47,8 +48,10 @@ router.get('/mine', (req, res) => {
     })
     .then((results) => {
         const { normalSets, binomSets } = results
-        res.send(results)
-        // res.render('datasets/index', {normalSets, binomSets})
+        const allSets = []
+        normalSets.forEach(set => allSets.push(set))
+        binomSets.forEach(set => allSets.push(set))
+        res.render('datasets/index', { allSets, loggedIn, username, userId })
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)
