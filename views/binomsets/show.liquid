@@ -18,6 +18,7 @@
         {% endif %}
     </article>
     {% render '../datasets/data.liquid', set: binomSet %}
+    {% render '../datasets/notes.liquid', type:"binom", set: binomSet, loggedIn: loggedIn %}
 
 </div>
 {% endblock %}

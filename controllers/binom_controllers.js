@@ -87,6 +87,7 @@ router.put('/:binomId', (req, res) => {
 router.get('/:binomId', (req, res) => {
 	const binomId = req.params.binomId
 	Binom.findById(binomId)
+		.populate("notes.author", "username")
 		.then(binomSet => {
             const {username, loggedIn, userId} = req.session
 			res.render('binomsets/show', { binomSet, username, loggedIn, userId })

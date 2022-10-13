@@ -1,0 +1,50 @@
+{% block content %}
+
+ <hr>
+    <h4>Comments</h4>
+    <hr>
+    {% if loggedIn %}
+        <button class="accordion-button" type="button" data-toggle="collapse" data-target="#noteForm" aria-expanded="true" aria-controls="collapseOne">
+        Leave a note about this dataset
+      </button>
+      <div class="col-md-6 collapse" id="noteForm">
+        <form action="/notes/{{type}}/{{set.id}}" method="POST">
+          <fieldset>
+            <label class="form-label">note:</label>
+            <input class="form-control" type="text" placeholer="enter your note..." name="content" required>
+          </fieldset>
+          <input class="btn btn-success" type="submit" value="add note">
+        </form>
+
+      </div>
+    {% else %}
+      <div class="col-md-6">
+        <p>If you'd like to leave a comment please login</p>
+      </div>
+    {% endif %}
+<hr>
+{% if set.notes.length > 0 %}
+    <button class="btn btn-primary" data-toggle="collapse" data-target="#notes">See notes about this dataset</button>
+    <div class="container md-4 collapse" id="notes">
+        {% for note in set.notes %}
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <p>{{note.content}}</p>
+                    <div class="d-flex justify-content-between">
+                        <small>author: {{note.author.username}} </small>
+                        {% if note.author == userId %}
+                            <form action="/notes/delete/{{set.id}}/{{note.id}}?_method=DELETE" method="POST">
+                                <input class="btn btn-danger" type="submit" value="X">
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+        {% endfor %}
+        </div>
+    </div>
+
+{% else %}
+    <p>There are not notes about this dataset</p>
+{% endif %}
+
+{% endblock %}

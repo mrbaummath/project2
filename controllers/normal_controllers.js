@@ -89,7 +89,9 @@ router.put('/:normalId', (req, res) => {
 router.get('/:normalId', (req, res) => {
 	const normalId = req.params.normalId
 	Normal.findById(normalId)
+		.populate("notes.author", "username")
 		.then(normalSet => {
+			
             const {username, loggedIn, userId} = req.session
 			res.render('normalsets/show', { normalSet, username, loggedIn, userId })
 		})

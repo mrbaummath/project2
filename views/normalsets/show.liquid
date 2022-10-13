@@ -22,4 +22,7 @@
 <div class="container-md">
     {% render '../desmos/normal_calc.liquid', set: normalSet %}
 </div>
+<div class="container-md">
+    {% render '../datasets/notes.liquid', type:"normal", set: normalSet, loggedIn: loggedIn %}
+</div>
 {% endblock %}

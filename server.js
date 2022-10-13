@@ -8,6 +8,7 @@ const NormalRouter = require('./controllers/normal_controllers')
 const BinomRouter = require('./controllers/binom_controllers')
 const DataRouter = require('./controllers/dataset_controllers')
 const UserRouter = require('./controllers/user')
+const NoteRouter = require('./controllers/note_controllers')
 const User = require("./models/user")
 // SEE MORE DEPENDENCIES IN ./utils/middleware.js
 // user and resource routes linked in ./utils/middleware.js
@@ -27,6 +28,7 @@ app.use('/auth', UserRouter)
 app.use('/normalsets', NormalRouter)
 app.use('/binomsets', BinomRouter)
 app.use('/datasets', DataRouter)
+app.use('/notes', NoteRouter )
 
 app.get('/', (req, res) => {
     const { username, userId, loggedIn } = req.session

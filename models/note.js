@@ -3,7 +3,7 @@ const mongoose = require('./connection')
 const { Schema } = mongoose
 
 const noteSchema = new Schema({
-    note: {
+    content: {
         type: String,
         required: true
     },
@@ -11,7 +11,7 @@ const noteSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
     
 }, {
     timestamps: true
