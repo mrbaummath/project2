@@ -12,7 +12,7 @@ const router = express.Router()
 //GET request to get form to create a new dataset, whether normal or binom
 router.get('/new', (req,res) => {
     const { username, loggedIn, userId } = req.session
-    res.render('datasets/new', { username, loggedIn })
+    res.render('datasets/new', { username, loggedIn, userId })
 
 })
 

@@ -58,11 +58,12 @@ router.post('/', (req, res) => {
 
 //show edit page 
 router.get('/:binomId/edit', (req, res) => {
+	const { username, userId, loggedIn } = req.session
 	// we need to get the id
 	const binomId = req.params.binomId
 	Binom.findById(binomId)
 		.then(binomSet => {
-			res.render('binomsets/edit', { binomSet })
+			res.render('binomsets/edit', { binomSet, loggedIn, username, userId })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
