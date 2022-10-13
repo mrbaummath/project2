@@ -7,7 +7,7 @@
         </h2>
         <h3>Mean: {{ normalSet.mean }}</h3>
         <h3>Standard Deviaton: {{ normalSet.stDev }}</h3>
-        {% if example.owner == userId %}
+        {% if normalSet.owner == userId %}
         <div class="btn-group">
 
             <a href="/normalsets/{{ normalSet.id }}/edit" class="btn btn-primary">Edit</a>

@@ -62,8 +62,7 @@ router.get('/:binomId/edit', (req, res) => {
 	const binomId = req.params.binomId
 	Binom.findById(binomId)
 		.then(binomSet => {
-			res.send(binomSet)
-			// res.render('normalsets/edit', { normalSet })
+			res.render('binomsets/edit', { binomSet })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -75,8 +74,7 @@ router.put('/:binomId', (req, res) => {
 	const binomId = req.params.binomId
 	Binom.findByIdAndUpdate(binomId, req.body, { new: true })
 		.then(binomSet => {
-			res.send(binomSet)
-			// res.redirect(`/normalsets/${example.id}`)
+			res.redirect(`/binomsets/${binomSet.id}`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)

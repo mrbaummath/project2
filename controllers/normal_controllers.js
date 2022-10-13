@@ -61,8 +61,7 @@ router.get('/:normalId/edit', (req, res) => {
 	const normalId = req.params.normalId
 	Normal.findById(normalId)
 		.then(normalSet => {
-			res.send(normalSet)
-			// res.render('normalsets/edit', { normalSet })
+			res.render('normalsets/edit', { normalSet })
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)
@@ -78,8 +77,7 @@ router.put('/:normalId', (req, res) => {
 	console.log(req.body)
 	Normal.findByIdAndUpdate(normalId, req.body, { new: true })
 		.then(normalSet => {
-			res.send(normalSet)
-			// res.redirect(`/normalsets/${example.id}`)
+			res.redirect(`/normalsets/${normalSet.id}`)
 		})
 		.catch((error) => {
 			res.redirect(`/error?error=${error}`)

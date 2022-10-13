@@ -1,0 +1,31 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+<div class="container-sm">
+    <form action="/binomsets/{{ binomSet.id }}?_method=PUT"  method="POST" >
+        <fieldset>
+            <label class="form-label">Title: </label>
+            <input 
+                type="text" 
+                name="title" 
+                value="{{ binomSet.title }}"
+                class="form-control"
+            >
+            <label class="form-label">"Success": </label>
+            <input 
+                type="text" 
+                name="p" 
+                value="{{ binomSet.p }}"
+                class="form-control"
+            >
+            <label class="form-label">"Failure": </label>
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ binomSet.q }}" 
+                class="form-control"
+            >
+    </fieldset>
+    <input type="submit" value="Edit Binomial Set" class="btn btn-success">
+    </form>
+</div>
+{% endblock %}
