@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
 			Normal.create(req.body)
 				.then(normalSet => {
 					console.log('this was returned from create', normalSet)
-					res.send(normalSet)
+					res.redirect('/datasets')
 					// res.redirect('/sets')
 				})
 				.catch(error => {

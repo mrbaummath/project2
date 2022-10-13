@@ -1,37 +1,94 @@
 {% layout 'layout.liquid' %}
 {% block content %}
 <div class="container-sm">
-    <form action="/examples" method="POST">
-        <fieldset>
-            <legend>Create New Example</legend>
-            <label class="form-label">Title: </label>
-            <input 
-                type="text" 
-                name="title" 
-                placeholder="enter example title"
-                class="form-control"
-            >
-            <label class="form-label">Body:</label>
-            <input 
-                type="text" 
-                name="body" 
-                placeholder="enter example body" 
-                class="form-control"
-            >
-            <label class="form-label">Amount:</label>
-            <input 
-                type="number" 
-                name="amount" 
-                class="form-control"
-            >
-            <label class="form-label">Ready:</label>
-            <input 
-                type="checkbox" 
-                name="ready" 
-                class="form-check-input"
-            >
-        </fieldset>
-        <input type="submit" value="Create New Example" class="btn btn-success">
-    </form>
+    <legend>Generate New Sample</legend>
+    <label class="form-label">Type:</label>
+    <div class="form-check form-check-inline">
+        <button class="btn btn-primary" data-toggle="collapse" name="newSample" data-target="#normal-form" name="normal" id="normal" checked>
+        <label class="form-check-label" for="normal">Sample from Normal Distribution</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <button class="btn btn-primary" data-toggle="collapse" data-target="#binomial-form" type="radio" name="binom" id="binom">
+        <label class="form-check-label" for="binom">Sample from Binomial Distribution</label>
+    </div>
+    <div id="newForms">
+        <div class="collapse" data-parent="#newForms" id="normal-form" class="newForm">
+            <form action="/normalsets"  method="POST" id="normal-form">
+                <fieldset>
+                        <label class="form-label">Title: </label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            placeholder="Enter a title describing your sample values."
+                            class="form-control"
+                        >
+                        <label class="form-label">Mean of Distribution: </label>
+                        <input 
+                            type="number" 
+                            name="mean" 
+                            placeholder="Enter the mean of the normal dist being sampled from." 
+                            class="form-control"
+                        >
+                        <label class="form-label">SD of Distribution: </label>
+                        <input 
+                            type="number" 
+                            name="stDev" 
+                            placeholder="Enter the population standard deviation of the normal dist being sampled from." 
+                            class="form-control"
+                        >
+                        <label class="form-label">Sample Size:</label>
+                        <input 
+                            type="number" 
+                            name="n" 
+                            placeholder="How many values do you want?"
+                            class="form-control"
+                        >
+                </fieldset>
+                <input type="submit" value="Create New Norml Set" class="btn btn-success">
+            </form>
+        </div>
+        <div class="collapse" data-parent="#newForms" id="binomial-form">
+            <form action="/binomsets"  method="POST">
+                <fieldset>
+                        <label class="form-label">Title: </label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            placeholder="Enter a title describing your sample values."
+                            class="form-control"
+                        >
+                        <label class="form-label">"Success": </label>
+                        <input 
+                            type="text" 
+                            name="p" 
+                            placeholder="Describe what a 'success' is in your Bernoulli trials." 
+                            class="form-control"
+                        >
+                        <label class="form-label">"Failure": </label>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Describe what a 'failure' is in your Bernoulli trials." 
+                            class="form-control"
+                        >
+                        <label class="form-label">Sample Size:</label>
+                        <input 
+                            type="number" 
+                            name="n" 
+                            placeholder="how many values do you want?"
+                            class="form-control"
+                        >
+                        <label class="form-label">Probability: </label>
+                        <input 
+                            type="text" 
+                            name="percentP" 
+                            placeholder="Enter the decimal probability of success"
+                            class="form-control"
+                        >
+                </fieldset>
+                <input type="submit" value="Create New Binomial Set" class="btn btn-success">
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
 			Binom.create(req.body)
 				.then(binomSet => {
 					console.log('this was returned from create', binomSet)
-					res.send(binomSet)
+					res.redirect('/datasets')
 					// res.redirect('/sets')
 				})
 				.catch(error => {
