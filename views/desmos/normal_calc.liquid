@@ -1,0 +1,18 @@
+{% block content %}
+
+{% assign mean = set.mean %}
+{% assign sd = set.stDev %}
+
+<script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+
+<div id="calculator" style="width: 600px; height: 400px;"></div>
+
+<script>
+  const mean = {{ mean }}
+  const sd = {{ sd }}
+  const elt = document.getElementById('calculator');
+  const calculator = Desmos.GraphingCalculator(elt);
+  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`});
+</script>
+
+{% endblock %}
