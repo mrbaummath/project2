@@ -1,6 +1,8 @@
 {% block content %}
 
 <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+<script src='https://unpkg.com/simple-statistics@7.7.5/dist/simple-statistics.min.js'>
+</script>
 
 <div id="calculator" style="width:100%; height:80vh"></div>
 
@@ -11,10 +13,22 @@
   const n = {{ set.n }} 
   const mean = n*p
   const sd = Math.sqrt(n*p*q)
+  const dist = ss.binomialDistribution(n, p)
+  console.log(dist)
+  const maxProb = Math.max(...dist)
+  console.log(maxProb)
+  const leftBound = (mean - 3*sd) > 0 ? (mean - 3*sd) : 0
+  const rightBound = (mean + 3*sd) < n ? (mean + 3*sd) : n
  
   const elt = document.getElementById('calculator');
   const calculator = Desmos.GraphingCalculator(elt);
   calculator.setExpression({ id: 'graph1', latex: `\\operatorname{binomialdist}\\left(${n},${p}\\right)`});
+  calculator.setMathBounds({
+    left: leftBound,
+    right: rightBound,
+    bottom: -1 * .01*maxProb,
+    top: 1.1*maxProb
+  })
 
 </script>
 

@@ -1,3 +1,5 @@
+
+
 {% block content %}
 
 <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
@@ -9,12 +11,18 @@
   const mean = {{ set.mean }}
   const n = {{ set.n }} 
   const sd = {{ set.stDev }}
-  const leftBound = mean - 3.5*sd
-  const rightBound = mean + 3.5*sd
-  const upperBound = 
-  const elt = document.getElementById('calculator');
-  const calculator = Desmos.GraphingCalculator(elt);
-  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`});
+  const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
+  const leftBound = mean - 5*sd
+  const rightBound = mean + 5*sd
+  const elt = document.getElementById('calculator')
+  const calculator = Desmos.GraphingCalculator(elt)
+  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`})
+  calculator.setMathBounds({
+    left: leftBound,
+    right: rightBound,
+    bottom: -1 * 0.01 * meanPDF,
+    top: 1.1 * meanPDF
+  })
 
 </script>
 
