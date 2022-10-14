@@ -6,15 +6,15 @@
 
 
 <script>
-  const mean = {{ set.mean }}
+  const p = {{ set.percentP }}
+  const q = 1 - {{ set.percentP }}
   const n = {{ set.n }} 
-  const sd = {{ set.stDev }}
-  const leftBound = mean - 3.5*sd
-  const rightBound = mean + 3.5*sd
-  const upperBound = 
+  const mean = n*p
+  const sd = Math.sqrt(n*p*q)
+ 
   const elt = document.getElementById('calculator');
   const calculator = Desmos.GraphingCalculator(elt);
-  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`});
+  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{binomialdist}\\left(${n},${p}\\right)`});
 
 </script>
 

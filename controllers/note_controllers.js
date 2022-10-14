@@ -51,7 +51,7 @@ router.delete('/delete/:type/:modelId/:noteId', (req,res) => {
             } else {
                 note.remove()
                 set.save()
-                res.redirect(`/${type}set/${set.id}`)
+                res.redirect(`/${type}sets/${set.id}`)
                 return
             }
         })
