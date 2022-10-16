@@ -7,16 +7,51 @@
 <div id="calculator" style="width:100%; height:80vh"></div>
 
 
+
+
+
 <script>
+  //create historam and normal distribution 
+  const values = []
+  {% for value in set.values %}
+    values.push({{ value }})
+  {% endfor %}
   const mean = {{ set.mean }}
+  const max = {{ set.max }}
+  const min = {{ set.min }}
   const n = {{ set.n }} 
   const sd = {{ set.stDev }}
   const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
+  const bins = Math.ceil(Math.sqrt(n))
+  const binWidth = (max - min ) / bins
   const leftBound = mean - 5*sd
   const rightBound = mean + 5*sd
   const elt = document.getElementById('calculator')
   const calculator = Desmos.GraphingCalculator(elt)
-  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`})
+  calculator.setExpression({ 
+    id: 'graph1', 
+    latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`
+    })
+  calculator.setExpression({
+    id: 'list',
+    latex: `L=\\left[${values}\\right]`
+  })
+    const histogram = calculator.setExpression({
+    id: 'histogram',
+    latex: `\\operatorname{histogram}\\left(L,${binWidth}\\right)`
+  })
+
+  const barHeight = () => {
+    const relButton = document.querySelector('[aria-label="Bar Heights: Density"]')
+    const event = document.createEvent('Event')
+    event.initEvent('mousedown', true, true)
+    relButton.dispatchEvent(event)
+    event.initEvent('mouseup',true,true)
+    relButton.dispatchEvent(event)
+  }
+
+  setTimeout(barHeight, 1500)
+
   calculator.setMathBounds({
     left: leftBound,
     right: rightBound,

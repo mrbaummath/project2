@@ -65,7 +65,7 @@ router.delete('/:type/:id', (req,res) => {
     const Collection = type === 'normal' ? Normal : Binom
     Collection.findByIdAndRemove(docId)
     .then((query) => {
-        res.send(query)
+        res.redirect(`/datasets`)
     })
     .catch(error => {
         res.redirect(`/error?error=${error}`)

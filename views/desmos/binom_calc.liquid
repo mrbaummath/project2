@@ -8,13 +8,18 @@
 
 
 <script>
+  const values = []
+  {% for value in set.values %}
+  values.push({{ value }})
+  {% endfor %}
+  const successes = values.filter(element => element === true).length
   const p = {{ set.percentP }}
   const q = 1 - {{ set.percentP }}
   const n = {{ set.n }} 
   const mean = n*p
   const sd = Math.sqrt(n*p*q)
   const dist = ss.binomialDistribution(n, p)
-  console.log(dist)
+  const height = dist[successes]
   const maxProb = Math.max(...dist)
   console.log(maxProb)
   const leftBound = (mean - 3*sd) > 0 ? (mean - 3*sd) : 0
@@ -22,13 +27,19 @@
  
   const elt = document.getElementById('calculator');
   const calculator = Desmos.GraphingCalculator(elt);
-  calculator.setExpression({ id: 'graph1', latex: `\\operatorname{binomialdist}\\left(${n},${p}\\right)`});
+  calculator.setExpression({ id: 'binom', latex: `\\operatorname{binomialdist}\\left(${n},${p}\\right)`});
   calculator.setMathBounds({
     left: leftBound,
     right: rightBound,
     bottom: -1 * .01*maxProb,
     top: 1.1*maxProb
   })
+  calculator.setExpression({
+    id:'p',
+    latex: `x=${successes}\\left\\{0<y<${height}\\right\\}`,
+    secret:true
+  })
+
 
 </script>
 
