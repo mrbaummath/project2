@@ -2,7 +2,7 @@
 {% layout 'layout.liquid'%}
 {% block content %}
 
-<div>
+<div class="container-fluid">
     <h2 class="display-6">Data Samples</h2>
  
         <div class="accordion-container">
@@ -24,7 +24,7 @@
                                 <h5 class="card-title">
                                     size: {{ set.n }}
                                 </h5>
-                                <a href="/{{ type }}/{{ set.id }}" class="btn btn-info">
+                                <a href="/{{ type }}/{{ set.id }}" class="btn btn-success">
                                     View {{ set.title }}
                                 </a>
                             </div>

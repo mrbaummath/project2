@@ -3,23 +3,34 @@
 }
 
 .accordion-button {
-    background-color: rgba(162, 54, 128, .3) !important;
-    color:rgb(74,162,54) !important;
+    background-color: rgba(200, 197, 197, .7) !important;
+    
+    color:rgb(19, 92, 3) !important;
     font-weight: bolder;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 }
 
 .accordion {
-    width: 75% !important;
-    margin-left: 1rem;
+    width: 70% !important;
+    margin-left: 3rem;
     height: 100%
     
+}
+
+.accordion-item {
+    background-color:  rgba(200, 197, 197, 0.238);
+    margin-bottom: .5rem;
+    border: thick solid rgba(7, 112, 17, 0.43) !important;
 }
 
 .accordion-container {
     height: 75vh;
     overflow:scroll
   
+}
+
+.btn {
+    margin: 10px
 }
 
 

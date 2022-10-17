@@ -1,9 +1,12 @@
 {% block content %}
-<div class="container-fluid">
-    <a class="btn btn-primary" data-toggle="collapse" href="#data-table" role="button" aria-expanded="false" aria-controls="data-table">
-        View Data
-    </a>
+    <div class="btn-group">
+        <a class="btn btn-success" data-toggle="collapse" href="#data-table" role="button" aria-expanded="false" aria-controls="data-table">
+            View Data
+        </a>
+    </div>
+    
     <div class="collapse" id="data-table">
+        <div style="height: 40vh; overflow:scroll">
         <table class="table table-sm">
             <tr>
                 <th scope="col">Value</th>
@@ -24,6 +27,6 @@
                 </tr>
             {% endfor %}
         </table>
+        </div>
     </div>
-</div>
 {% endblock %}
