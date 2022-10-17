@@ -30,7 +30,7 @@ router.post('/signup', async (req, res) => {
 	User.create(req.body)
 		// if created successfully redirect to login
 		.then((user) => {
-			res.redirect('auth/login')
+			res.redirect('/auth/login')
 			// res.redirect('/auth/login')
 		})
 		// if an error occurs, send err
