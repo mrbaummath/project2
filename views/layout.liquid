@@ -21,14 +21,19 @@
     <header>
         {% render './navbar.liquid', loggedIn: loggedIn, username: username, userId: userId %}
     </header>
-        
-    <main>
-        {% block content %} 
-        {% endblock %}    
-    </main>
-    <footer class="fixed-bottom">
-        <p class ="text-center text-muted">© 2022 mrbaummath</p>
-    </footer>
+    <div class="container-fluid">
+        <div class="row">
+            <main>
+                {% block content %} 
+                {% endblock %}    
+            </main>
+        </div>
+        <div class="row">
+            <footer>
+                <p class ="text-center text-muted">© 2022 mrbaummath</p>
+            </footer>
+        </div>
+    </div>
 </body>
 
 </html>
