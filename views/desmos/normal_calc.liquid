@@ -2,47 +2,59 @@
 
 {% block content %}
 
+{%- comment -%} link to desmos api {%- endcomment -%}
 <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
 
+{%- comment -%} div for graphing calculator - needed for API {%- endcomment -%}
 <div id="calculator" style="width:100%; height:80vh"></div>
-
-
 
 
 
 <script>
   //create historam and normal distribution 
+  //initialize empty array to hold values from sample
   const values = []
+  //push values from liquid template into the array. While the liquid object is iterable, it doesn't show up as separte values as is
   {% for value in set.values %}
     values.push({{ value }})
   {% endfor %}
+  //grab sample summary statistics
   const mean = {{ set.mean }}
   const max = {{ set.max }}
   const min = {{ set.min }}
   const n = {{ set.n }} 
   const sd = {{ set.stDev }}
+  //find density value for the sample's mean and SD combo - this will be helpful for setting calculator bounds
   const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
+  //calculate number of histogram bins
   const bins = Math.ceil(Math.sqrt(n))
+  //calculate bin width 
   let binWidth = (max - min ) / bins
-   binWidth = Math.round(binWidth*100)/100
+  //round binwidth - this is helpful for making sure the histogram can be more easily represented programatically
+  binWidth = Math.round(binWidth*100)/100
+  //variables for side bounds of the calculator
   const leftBound = mean - 5*sd
   const rightBound = mean + 5*sd
+  //init calculator
   const elt = document.getElementById('calculator')
     const calculator = Desmos.GraphingCalculator(elt, {
   })
+  //graph the normal distribution related to this set
   calculator.setExpression({ 
     id: 'graph1', 
     latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`
     })
+  //inject list of values into desmos
   calculator.setExpression({
     id: 'list',
     latex: `L=\\left[${values}\\right]`
   })
+  //graph histogram of set
     calculator.setExpression({
     id: 'histogram',
     latex: `\\operatorname{histogram}\\left(L,${binWidth}\\right)`
   })
-
+  //programatically set bar height to density view. This keeps histogram and the normal curve on the same scale. To avoid issues created by delayed creation of Desmos elements, I set a timeout. In a refactor, I want to do this as a promise 
   const barHeight = () => {
     const relButton = document.querySelector('[aria-label="Bar Heights: Density"]')
     const event = document.createEvent('Event')
@@ -53,7 +65,7 @@
   }
 
   setTimeout(barHeight, 1500)
-
+//Set viewing bounds for this graphing calculator
   calculator.setMathBounds({
     left: leftBound,
     right: rightBound,

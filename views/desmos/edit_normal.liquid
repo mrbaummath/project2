@@ -7,27 +7,35 @@
 
 <script>
   //create historam and normal distribution 
+  //init arrays for changed sample values and original sample values 
   let newValues = []
   const values = []
+  //iterate through template variable - while set.values is an array in the db, it doesn't come across that way when fed here 
   {% for value in set.values %}
     values.push({{ value }})
   {% endfor %}
+  //grab summary stats from sample 
   const mean = {{ set.mean }}
   const max = {{ set.max }}
   const min = {{ set.min }}
   const n = {{ set.n }} 
   const sd = {{ set.stDev }}
-  const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
+  //calculate # of bins
   const bins = Math.ceil(Math.sqrt(n))
+  //calc and round binwidth 
   let binWidth = (max - min ) / bins
   binWidth = Math.ceil(binWidth)
+  //calc lt and rt bounds for calc window
   const leftBound = mean - 5*sd
   const rightBound = mean + 5*sd
+  //init calculator
   const elt = document.getElementById('calculator')
   const calculator = Desmos.GraphingCalculator(elt, {
     expressionsCollapsed: true
   })
+  //init histogram array
   const histogram = []
+  //construct representation of histogram, which will be used to create a histogram in Desmos later. This will give more control than using Desmos' native histogram feature, whose values cannot really be changed/accessed so simply. In particlar, it is not trivial to guarantee that the left and right bounds of bins would match what is stored in the code, making it harder to apropriately generate the right number of values in those bins later.
   for (let i = 0; i < bins; i ++) {
     let bin = {}
     bin.left = min + i * binWidth
@@ -35,71 +43,79 @@
     bin.count = values.filter(value => (value >= bin.left && value < bin.right)).length
     histogram.push(bin)
   }
+  //init array of bar heights 
   const heights = histogram.map(bin => (bin.count))
+  //find max bar heght
   const maxCount = Math.max(...heights)
+  //init latex string to set Desmos expression later
   let listLatex = `L=\\left[`
+  //set Desmos expresions to generate interactive histogram
+  histogram.forEach((bin, index) => {
+      const center = (bin.left + bin.right) / 2
 
-    histogram.forEach((bin, index) => {
-        const center = (bin.left + bin.right) / 2
+      calculator.setExpression({
+        id: `a_{${index}}-slider`,
+        latex: `a_{${index}}=${bin.count}`,
+        sliderBounds: {step: `1`},
+        secret: true
+      })
 
-        calculator.setExpression({
-          id: `a_{${index}}-slider`,
-          latex: `a_{${index}}=${bin.count}`,
-          sliderBounds: {step: `1`},
+      calculator.setExpression({
+        latex: `y=a_{${index}}\\left\\{${bin.left}\\le x\\le${bin.right}\\right\\}`,
+        color: Desmos.Colors.PURPLE
+      })
+
+      calculator.setExpression({
+          id: `point${index}`,
+          latex: `P_{${index}}=\\left(${center},a_{${index}}\\right)`,
+          color: Desmos.Colors.PURPLE,
+          secret: true,
+          dragMode: Desmos.DragModes.Y
+      })
+      calculator.setExpression({
+          latex: `${bin.left}\\le x\\le${bin.right}\\left\\{0\\le y\\le P_{${index}}.y\\right\\}`, 
+          color: Desmos.Colors.PURPLE,
           secret: true
-        })
+      })
 
-        calculator.setExpression({
-          latex: `y=a_{${index}}\\left\\{${bin.left}\\le x\\le${bin.right}\\right\\}`,
-          color: Desmos.Colors.PURPLE
-        })
-
-        calculator.setExpression({
-            id: `point${index}`,
-            latex: `P_{${index}}=\\left(${center},a_{${index}}\\right)`,
-            color: Desmos.Colors.PURPLE,
-            secret: true,
-            dragMode: Desmos.DragModes.Y
-        })
-        calculator.setExpression({
-            latex: `${bin.left}\\le x\\le${bin.right}\\left\\{0\\le y\\le P_{${index}}.y\\right\\}`, 
-            color: Desmos.Colors.PURPLE,
-            secret: true
-        })
-
-       if (!(index === (histogram.length - 1))) {
-          listLatex += `a_{${index}},`
-       } else {
-        listLatex += `a_{${index}}\\right]`
-       }
-    })
-
-    calculator.setExpression({
-    id: 'data-list',
-    latex: `V=\\left[${values}\\right]`,
-    secret:true 
+      if (!(index === (histogram.length - 1))) {
+        listLatex += `a_{${index}},`
+      } else {
+      listLatex += `a_{${index}}\\right]`
+      }
   })
 
+  //set list of data values
+  calculator.setExpression({
+  id: 'data-list',
+  latex: `V=\\left[${values}\\right]`,
+  secret:true 
+})
 
+  //set list of bar heights 
   calculator.setExpression({
     id: 'y-list',
     latex: `${listLatex}`,
     secret: true
   })
-
+  //set a Desmos helper expression which can be observed to track bar heights 
   const L = calculator.HelperExpression({ latex: 'L' })
-
+  //init variable to help determine whether user has changed bar heights. See L.observe below for more
   let dataChange = -1
 
-document.addEventListener('DOMContentLoaded', () => {
+
+  //observe helper expression. This will fire the callback function whenever the list is changed. It also, annoyingly, fires on L being observed. This is why I didn't use a boolean - it was easier just to use a count
   L.observe('listValue', function() {
+    //fire dataChange
     dataChange += 1
-    createNewData()
+    if (dataChange > 0) {
+      createNewData()
+    }
   })
   
 
-})
 
+//generate psuedo random values to match the new histogram, as changed by the user. I'm not sure how easy it would be to construct more RANDOM.org calls for each bin. Moreover, I don't want to run into issues making too many calls since I'm using a free API token.
 const createNewData = () => {
   newValues=[]
   const list = L.listValue
@@ -115,6 +131,7 @@ const createNewData = () => {
 
 }
 
+//onsubmit function for the input form which will prepare sample values to be edited or to stay the same with submission
 const processData = () => {
   const valuesNode = document.querySelector('#value-input')
   if (dataChange > 0) {
@@ -125,12 +142,13 @@ const processData = () => {
   }
 }
 
-  calculator.setMathBounds({
-    left: leftBound,
-    right: rightBound,
-    bottom: -1,
-    top: maxCount + 3
-  })
+//set graphing window
+calculator.setMathBounds({
+  left: leftBound,
+  right: rightBound,
+  bottom: -1,
+  top: maxCount + 3
+})
 
 </script>
 
