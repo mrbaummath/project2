@@ -1,18 +1,34 @@
 {% layout 'layout.liquid' %}
 {% block content %}
-<div class="container-sm">
-    <form action="/normalsets/{{ normalSet.id }}?_method=PUT"  method="POST" id="normal-form">
-        <fieldset>
-                <label class="form-label">Title: </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    value={{ normalSet.title }}
-                    class="form-control"
-                >
-                
-        </fieldset>
-        <input type="submit" value="Edit Normal Set" class="btn btn-success">
-    </form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3>Edit your Dataset</h3>
+            <p>You can change the title of your set using the field below. To change the sample itself, drag the point at the tops of the histogram bars in the Desmos window. Once you're happy with the shape, press the edit button below the title field. Note that the upon editing, all the underlying values are subject to change</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <form action="/normalsets/{{ normalSet.id }}?_method=PUT" onsubmit="processData()"  method="POST" id="normal-form">
+                <fieldset>
+                        <label class="form-label">Title: </label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            id="title"
+                            value={{ normalSet.title }}
+                            class="form-control"
+                        >
+                        <input type="text"  id="value-input" name="values" style="display:none">      
+                </fieldset>
+                <input type="submit" value="Edit Normal Set" class="btn btn-success">
+            </form>
+
+        </div>
+        <div class="col-8">
+            {% render '../desmos/edit_normal.liquid', set: normalSet %}
+
+        </div>
+   </div> 
 </div>
 {% endblock %}

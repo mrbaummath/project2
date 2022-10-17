@@ -4,6 +4,8 @@
 const express = require('express')
 const Normal = require('../models/normal')
 const { gaussPromise, processGauss } = require('../utils/random')
+const { std, mean } = require('mathjs')
+
 
 
 // Create router
@@ -75,6 +77,9 @@ router.put('/:normalId', (req, res) => {
 	//*grab raw data
 	//*compute new mean,sd, min, max
 	//*add to req.body
+	req.body.values = JSON.parse(req.body.values)
+	req.body.stDev = Math.round(std(req.body.values)*100) / 100
+	req.body.mean = Math.round(mean(req.body.values)*100) / 100
 	console.log(req.body)
 	Normal.findByIdAndUpdate(normalId, req.body, { new: true })
 		.then(normalSet => {

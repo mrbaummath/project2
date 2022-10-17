@@ -1,7 +1,12 @@
 {% layout "layout.liquid" %}
 {% block content %}
-
-    <h1>Welcome!</h1>
+    <div class="container-fluid">
+        <h1>Welcome! to Stat Generator!</h1>
+        <h3>A tool for teachers to generate samples from a given distribution</h3>
+        <p>To get started, either signup or login. You can view existing samples or generate your own samples from a normally distributed population set or from Bernoulli trials with custom parameters.</p>
+        <p>When you first fill out a form to generate data, Stat-generator will reach out to RANDOM.org to get a truly randomized set of data.</p>
+        <p>You also have the option of taking one of your samples from a Gaussian distribution and editing the shape of the sample distribution to populate new values via an interactive Desmos graph. This feature relies on pseudorandom code (vanilla JS)</p>
+    </div>
 
 
 {% endblock %}

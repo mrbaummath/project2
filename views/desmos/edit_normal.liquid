@@ -1,0 +1,139 @@
+{% block content %}
+
+<script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+
+<div id="calculator" style="width:100%; height:60vh"></div>
+
+
+<script>
+  //create historam and normal distribution 
+  let newValues = []
+  const values = []
+  {% for value in set.values %}
+    values.push({{ value }})
+  {% endfor %}
+  const mean = {{ set.mean }}
+  const max = {{ set.max }}
+  const min = {{ set.min }}
+  const n = {{ set.n }} 
+  const sd = {{ set.stDev }}
+  const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
+  const bins = Math.ceil(Math.sqrt(n))
+  let binWidth = (max - min ) / bins
+  binWidth = Math.ceil(binWidth)
+  const leftBound = mean - 5*sd
+  const rightBound = mean + 5*sd
+  const elt = document.getElementById('calculator')
+  const calculator = Desmos.GraphingCalculator(elt, {
+    expressionsCollapsed: true
+  })
+  const histogram = []
+  for (let i = 0; i < bins; i ++) {
+    let bin = {}
+    bin.left = min + i * binWidth
+    bin.right = bin.left + binWidth
+    bin.count = values.filter(value => (value >= bin.left && value < bin.right)).length
+    histogram.push(bin)
+  }
+  const heights = histogram.map(bin => (bin.count))
+  const maxCount = Math.max(...heights)
+  let listLatex = `L=\\left[`
+
+    histogram.forEach((bin, index) => {
+        const center = (bin.left + bin.right) / 2
+
+        calculator.setExpression({
+          id: `a_{${index}}-slider`,
+          latex: `a_{${index}}=${bin.count}`,
+          sliderBounds: {step: `1`},
+          secret: true
+        })
+
+        calculator.setExpression({
+          latex: `y=a_{${index}}\\left\\{${bin.left}\\le x\\le${bin.right}\\right\\}`,
+          color: Desmos.Colors.PURPLE
+        })
+
+        calculator.setExpression({
+            id: `point${index}`,
+            latex: `P_{${index}}=\\left(${center},a_{${index}}\\right)`,
+            color: Desmos.Colors.PURPLE,
+            secret: true,
+            dragMode: Desmos.DragModes.Y
+        })
+        calculator.setExpression({
+            latex: `${bin.left}\\le x\\le${bin.right}\\left\\{0\\le y\\le P_{${index}}.y\\right\\}`, 
+            color: Desmos.Colors.PURPLE,
+            secret: true
+        })
+
+       if (!(index === (histogram.length - 1))) {
+          listLatex += `a_{${index}},`
+       } else {
+        listLatex += `a_{${index}}\\right]`
+       }
+    })
+
+    calculator.setExpression({
+    id: 'data-list',
+    latex: `V=\\left[${values}\\right]`,
+    secret:true 
+  })
+
+
+  calculator.setExpression({
+    id: 'y-list',
+    latex: `${listLatex}`,
+    secret: true
+  })
+
+  const L = calculator.HelperExpression({ latex: 'L' })
+
+  let dataChange = -1
+
+document.addEventListener('DOMContentLoaded', () => {
+  L.observe('listValue', function() {
+    dataChange += 1
+    createNewData()
+  })
+  
+
+})
+
+const createNewData = () => {
+  newValues=[]
+  const list = L.listValue
+   list.forEach((newCount, index) => {
+    for (let i = 0; i < newCount; i++) {
+      const min = histogram[index].left
+      const max = histogram[index].right
+      const range = max - min
+      const newValue = Math.round((Math.random() * range + min)*100)/100
+      newValues.push(newValue)
+    }
+  })
+
+}
+
+const processData = () => {
+  const valuesNode = document.querySelector('#value-input')
+  if (dataChange > 0) {
+    valuesNode.value = `[${newValues}]`
+  } else {
+    valuesNode.value = `[${values}]`
+    return true
+  }
+}
+
+  calculator.setMathBounds({
+    left: leftBound,
+    right: rightBound,
+    bottom: -1,
+    top: maxCount + 3
+  })
+
+</script>
+
+
+
+{% endblock %}

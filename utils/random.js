@@ -11,7 +11,7 @@ require('dotenv').config()
             "n": n,
             "mean": mean,
             "standardDeviation": sigma,
-            "significantDigits": 6,
+            "significantDigits": Math.log10(mean) > 0 ? Math.floor(Math.log10(mean)) + 3: 3 ,
             "pregeneratedRandomization": null
         },
         "id": 14710

@@ -23,11 +23,13 @@
   const sd = {{ set.stDev }}
   const meanPDF = 1 / (sd * Math.sqrt(2*Math.PI))
   const bins = Math.ceil(Math.sqrt(n))
-  const binWidth = (max - min ) / bins
+  let binWidth = (max - min ) / bins
+   binWidth = Math.round(binWidth*100)/100
   const leftBound = mean - 5*sd
   const rightBound = mean + 5*sd
   const elt = document.getElementById('calculator')
-  const calculator = Desmos.GraphingCalculator(elt)
+    const calculator = Desmos.GraphingCalculator(elt, {
+  })
   calculator.setExpression({ 
     id: 'graph1', 
     latex: `\\operatorname{normaldist}\\left(${mean},${sd}\\right)`
@@ -36,7 +38,7 @@
     id: 'list',
     latex: `L=\\left[${values}\\right]`
   })
-    const histogram = calculator.setExpression({
+    calculator.setExpression({
     id: 'histogram',
     latex: `\\operatorname{histogram}\\left(L,${binWidth}\\right)`
   })
