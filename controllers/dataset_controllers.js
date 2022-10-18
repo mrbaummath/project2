@@ -20,6 +20,7 @@ router.get('/new', (req,res) => {
 //will use async.parallel to get documents from both binom and normal collections 
 router.get('/', (req, res) => {
     const { username, userId, loggedIn } = req.session
+    // Nice use of `.parallel` here!
     async.parallel ({
         normalSets: (cb) => {Normal.find({}).exec(cb)},
         binomSets: (cb) => {Binom.find({}).exec(cb)}
@@ -27,6 +28,7 @@ router.get('/', (req, res) => {
     .then((results) => {
         const { normalSets, binomSets } = results
         const allSets = []
+        // Nit: best practice when having  one liners like this is to leave a comment above on what the intent of the line is. This way in the future someone else or yourself can comeback and know what is going on. Here it's an easy action but these can get super fancy and not human readable quick.
         normalSets.forEach(set => allSets.push(set))
         binomSets.forEach(set => allSets.push(set))
         
@@ -42,6 +44,7 @@ router.get('/', (req, res) => {
 
 router.get('/mine', (req, res) => {
     const { username, userId, loggedIn } = req.session
+    // Again love the use of `.parallel` here
     async.parallel ({
         normalSets: (cb) => {Normal.find({ owner: userId }).exec(cb)},
         binomSets: (cb) => {Binom.find({ owner: userId }).exec(cb)}
@@ -49,6 +52,7 @@ router.get('/mine', (req, res) => {
     .then((results) => {
         const { normalSets, binomSets } = results
         const allSets = []
+        // same as above
         normalSets.forEach(set => allSets.push(set))
         binomSets.forEach(set => allSets.push(set))
         res.render('datasets/index', { allSets, loggedIn, username, userId })
@@ -64,6 +68,7 @@ router.delete('/:type/:id', (req,res) => {
     const type = req.params.type
     const Collection = type === 'normal' ? Normal : Binom
     Collection.findByIdAndRemove(docId)
+    // Nit: can remove `query` here since it's not used and just pass in nothing here  () => {}
     .then((query) => {
         res.redirect(`/datasets`)
     })

@@ -1,7 +1,7 @@
 const axios = require('axios')
 require('dotenv').config()
 
-
+// Nit: add a comment for  this function of what it does and what it returns
  const gaussPromise = (mean, sigma, n) => {
     const requestBody = {
         "jsonrpc": "2.0",
@@ -20,10 +20,12 @@ require('dotenv').config()
 }
 
 const processGauss = (dataArray) => {
+    // Nit: add a comment on what this sort is sorting for
     let processedData = dataArray.sort(function(a,b){return a - b})
     return processedData 
 }
 
+// Nit: add a comment on what this function is doing and what it returns
 const binomPromise = (n) => {
     const requestBody = {
         "jsonrpc": "2.0",
@@ -42,6 +44,7 @@ const binomPromise = (n) => {
 }
 
 const processBinom = (percentP, decimalArray) => {
+    // Nit: add a comment on what this map does
     const boolArray = decimalArray.map(decimal => (decimal <= percentP))
     return boolArray
 }
@@ -64,9 +67,3 @@ const processBinom = (percentP, decimalArray) => {
 
 
 module.exports = { gaussPromise, processGauss, binomPromise, processBinom }
-
-
-
-
-
-
