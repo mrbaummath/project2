@@ -31,6 +31,7 @@ router.use((req, res, next) => {
 router.post('/', (req, res) => {
 	req.body.owner = req.session.userId
 	//*grab data from req.body needed to call to Random.org
+	// Nit: again `n` here is not a good var name
 	const { mean, stDev, n} = req.body
 	//*call to random.org API using axios
 	gaussPromise(mean, stDev, n)
@@ -40,10 +41,12 @@ router.post('/', (req, res) => {
 			req.body.values = dataArray
 			req.body.min = dataArray[0]
 			req.body.max = dataArray[n-1]
+			// Nit: remove console.logs from production
 			console.log(req.body)
 			//create the model
 			Normal.create(req.body)
 				.then(normalSet => {
+					// Nit: remove console.logs from production
 					console.log('this was returned from create', normalSet)
 					res.redirect('/datasets')
 					// res.redirect('/sets')
@@ -74,15 +77,17 @@ router.get('/:normalId/edit', (req, res) => {
 // update route
 router.put('/:normalId', (req, res) => {
 	const normalId = req.params.normalId
+	// Nit: love the comments here on what you are doing. Move them to right above each line they are referencing
 	//*grab raw data
 	//*compute new mean,sd, min, max
 	//*add to req.body
 	req.body.values = JSON.parse(req.body.values)
-	req.body.stDev = Math.round(std(req.body.values)*100) / 100
-	req.body.mean = Math.round(mean(req.body.values)*100) / 100
+	req.body.stDev = Math.round(std(req.body.values) * 100) / 100
+	req.body.mean = Math.round(mean(req.body.values) * 100) / 100
+	// Nit: remove console.logs from production
 	console.log(req.body)
 	Normal.findByIdAndUpdate(normalId, req.body, { new: true })
-		.then(normalSet => {
+		.then((normalSet) => {
 			res.redirect(`/normalsets/${normalSet.id}`)
 		})
 		.catch((error) => {
@@ -94,6 +99,7 @@ router.put('/:normalId', (req, res) => {
 router.get('/:normalId', (req, res) => {
 	const normalId = req.params.normalId
 	Normal.findById(normalId)
+	// Nit:  choose  either double or single quotes
 		.populate("notes.author", "username")
 		.then(normalSet => {
 			

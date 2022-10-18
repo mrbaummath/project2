@@ -31,7 +31,9 @@ router.post('/', (req, res) => {
 	//add user to req.body
 	req.body.owner = req.session.userId
 	//grab data from req.body needed to call to Random.org
+	// Nit: using the varible name `n` is not best practice. Always name vars with what they contain even if that's a long var name
 	const n = req.body.n
+	// Nit: same thing here as above. `percentP` is a little more meaningful but still not fully there
 	const percentP = req.body.percentP
 	//call to random.org API using axios (see ../utils/random)
 	binomPromise(n)
@@ -42,6 +44,7 @@ router.post('/', (req, res) => {
 			//create document
 			Binom.create(req.body)
 				.then(binomSet => {
+					// Nit: remove console.logs from production
 					console.log('this was returned from create', binomSet)
 					res.redirect('/datasets')
 					// res.redirect('/sets')
@@ -87,6 +90,7 @@ router.put('/:binomId', (req, res) => {
 router.get('/:binomId', (req, res) => {
 	const binomId = req.params.binomId
 	Binom.findById(binomId)
+	// Nit: choose either double or single quotes
 		.populate("notes.author", "username")
 		.then(binomSet => {
             const {username, loggedIn, userId} = req.session
